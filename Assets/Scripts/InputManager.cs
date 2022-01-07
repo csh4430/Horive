@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager : MonoSingleton<InputManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public Dictionary<Direction, KeyCode> keySetDict = new Dictionary<Direction, KeyCode>();
+
+    public void SetKey(Direction direction, KeyCode key)
     {
-        
+        keySetDict[direction] = key;
     }
 
-    // Update is called once per frame
-    void Update()
+    public KeyCode GetKey(Direction direction)
     {
-        
+        return keySetDict[direction];
     }
 }

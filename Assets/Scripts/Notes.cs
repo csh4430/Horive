@@ -1,11 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum Direction
+{
+    Left,
+    Right,
+    Up,
+    Down
+}
 
 public class Notes : MonoBehaviour
 {
-    public float summonedTime = 0f;
-    public float duration = 0f;
+    public float summonedTime { get; private set; }
+    public float duration  { get; private set; }
+    public float size { get; private set; }
+
+    public Direction direction { get; private set; }
+    
+
+    public void SetPitch(float size, float duration, Direction direction)
+    {
+        this.size = size;
+        this.duration = duration;
+        this.direction = direction;
+    }
 
     private void OnEnable()
     {
@@ -14,7 +32,6 @@ public class Notes : MonoBehaviour
 
     private void OnDisable()
     {
-        summonedTime = 0f;
-        duration = 0f;
+        transform.localScale = Vector3.zero;
     }
 }

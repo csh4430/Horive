@@ -5,26 +5,30 @@ using DG.Tweening;
 
 public class NoteController
 {
-    public static void Bigger(Notes note, float size, float duration, string direction)
+    public static void Bigger(Notes note, float size, float duration, Direction direction)
     {
+        note.SetPitch(size, duration, direction);
         switch (direction)
         {
-            case "Right":
+            case Direction.Right:
                 note.transform.position = new Vector2(size / 2, 0);
                 break;
-            case "Left":
+            case Direction.Left:
                 note.transform.position = new Vector2(-size / 2, 0);
                 break;
-            case "Up":
+            case Direction.Up:
                 note.transform.position = new Vector2(0, size / 2);
                 break;
-            case "Down":
+            case Direction.Down:
                 note.transform.position = new Vector2(0, -size / 2);
                 break;
         }
         note.transform.DOScale(Vector2.one * size, duration).SetEase(Ease.Linear).onComplete += () =>
         {
-            note.gameObject.SetActive(false);
+            note.gameObject.transform.localScale = Vector3.zero;
+            if (!note.gameObject.activeInHierarchy) return;
+            Debug.Log(Time.time - note.summonedTime);
+            PoolManager.Instance.DeSpawn(note.gameObject);
         };
     }
 }
