@@ -14,13 +14,11 @@ public class ToolTip : MonoBehaviour
     }
     private void OnEnable()
     {
-        Twinkle();
+        Show();
     }
 
-    private void Twinkle()
+    private void Show()
     {
-        image.DOFade(0, 0.5f).OnComplete(() => image.DOFade(1, 0.5f)).SetDelay(1f);
-        image.DOFade(0, 0.5f).OnComplete(() => image.DOFade(1, 0.5f)).SetDelay(2f);
-        image.DOFade(0, 1f).SetDelay(3.5f).OnComplete(() => { image.DOFade(1, 0).SetDelay(5); });
+        image.DOFade(1, 1f).OnComplete(() => { image.DOFade(0, 2f).SetDelay(2); });
     }
 }

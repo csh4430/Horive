@@ -23,7 +23,7 @@ public class NoteController
                 note.transform.position = new Vector2(0, -size / 2);
                 break;
         }
-        note.transform.DOScale(Vector2.one * size, duration).SetEase(Ease.Linear).onComplete += () =>
+        note.transform.DOScale(Vector2.one * size, duration).onComplete += () =>
         {
             note.gameObject.transform.localScale = Vector3.zero;
             if (!note.gameObject.activeInHierarchy) return;

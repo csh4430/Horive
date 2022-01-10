@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class PoolManager : MonoSingleton<PoolManager>
 {
-    private Queue<GameObject> poolQueue = new Queue<GameObject>();
+    private  List<GameObject> poolList = new List<GameObject>();
 
     public GameObject Pool(GameObject original, Transform parent)
     {
         GameObject result = null;
-        if (poolQueue.Count == 0)
+        if (poolList.Count == 0)
         {
             result = Instantiate(original, parent);
+            result.SetActive(true);
             result.name = original.name;
             result.transform.position = parent.position;
         }
         else
         {
-            result = poolQueue.Dequeue();
+            foreach (var pool in poolList)
+            {
+                if (pool.name == original.name)
+                {
+                    result = pool;
+                    result.SetActive(true);
+                    result.name = original.name;
+                    result.transform.position = Vector2.zero;
+                    poolList.Remove(result);
+                    return result;
+                }
+            }
+
+            result = Instantiate(original, parent);
             result.SetActive(true);
             result.name = original.name;
             result.transform.position = parent.position;
-            result.transform.SetParent(parent);
         }
 
         return result;
@@ -30,19 +43,33 @@ public class PoolManager : MonoSingleton<PoolManager>
     public GameObject Pool(GameObject original)
     {
         GameObject result = null;
-        if (poolQueue.Count == 0)
+        if (poolList.Count == 0)
         {
             result = Instantiate(original);
+            result.SetActive(true);
             result.name = original.name;
             result.transform.position = Vector2.zero;
         }
         else
         {
-            result = poolQueue.Dequeue();
+            foreach(var pool in poolList)
+            {
+                if (pool.name == original.name)
+                {
+                    result = pool;
+                    result.SetActive(true);
+                    result.name = original.name;
+                    result.transform.position = Vector2.zero;
+                    result.transform.SetParent(null);
+                    poolList.Remove(result);
+                    return result;
+                }
+            }
+
+            result = Instantiate(original);
             result.SetActive(true);
             result.name = original.name;
             result.transform.position = Vector2.zero;
-            result.transform.SetParent(null);
         }
 
         return result;
@@ -51,7 +78,7 @@ public class PoolManager : MonoSingleton<PoolManager>
 
     public void DeSpawn(GameObject target)
     {
-        poolQueue.Enqueue(target);
+        poolList.Add(target);
         target.SetActive(false);
     }
 }

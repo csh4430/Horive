@@ -6,7 +6,8 @@ public enum Direction
     Left,
     Right,
     Up,
-    Down
+    Down,
+    None
 }
 
 public class Notes : MonoBehaviour
