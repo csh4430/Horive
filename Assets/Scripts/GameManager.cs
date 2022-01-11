@@ -2,24 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] private GameObject centerObject = null;
     [SerializeField] GameObject originalNote = null;
     [SerializeField] float offset = 0;
     private int correctNotes = 0;
-    bool isKeyHold = false;
+    public bool hasPaused = false;
+
     void Start()
     {
         StartCoroutine(Ready());
-        InputManager.Instance.SetKey(Direction.Left, KeyCode.D);
-        InputManager.Instance.SetKey(Direction.Right, KeyCode.K);
-        InputManager.Instance.SetKey(Direction.Up, KeyCode.F);
-        InputManager.Instance.SetKey(Direction.Down, KeyCode.J);
     }
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && !hasPaused)
         {
             Notes a = CheckNote(offset);
 
@@ -32,7 +29,6 @@ public class GameManager : MonoBehaviour
             { 
                 if (Input.GetKeyDown(InputManager.Instance.GetKey(a.direction)))
                 {
-                
                     float noteSpeed = a.size / 2 / a.duration;
                     float pitch = (a.size / 2 - offset) / noteSpeed;
                     Debug.Log(string.Format("{0}, {1}, {2}", pitch, Time.time, a.summonedTime));

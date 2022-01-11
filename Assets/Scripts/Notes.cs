@@ -9,7 +9,6 @@ public enum Direction
     Down,
     None
 }
-
 public class Notes : MonoBehaviour
 {
     public float summonedTime { get; private set; }
