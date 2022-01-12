@@ -4,19 +4,50 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] private GameObject centerObject = null;
-    [SerializeField] GameObject originalNote = null;
-    [SerializeField] float offset = 0;
+    public enum GameState
+    {
+        Init,
+        Select,
+        Setting,
+        InGame
+    }
+
+    #region InGame
+    private GameObject originalNote = null;
+    private float offset = 0.5f;
     private int correctNotes = 0;
-    public bool hasPaused = false;
+    public bool hasPaused { get; private set; }
+    #endregion
+
+    public static GameState CurrentState { get; private set; }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        CurrentState = GameState.Init;
+
+    }
+
+    public override void Initialize()
+    {
+        if (CurrentState == GameState.InGame)
+        {
+            //centerObject = GameObject.Find("Center");
+        }
+        hasPaused = true;
+        originalNote = (GameObject)Resources.Load("Prefab/Circle");
+
+        if (CurrentState == GameState.InGame)
+            StartCoroutine(Ready());
+    }
 
     void Start()
     {
-        StartCoroutine(Ready());
     }
     void Update()
     {
-        if (Input.anyKeyDown && !hasPaused)
+        if (Input.anyKeyDown && !hasPaused && CurrentState == GameState.InGame)
         {
             Notes a = CheckNote(offset);
 
@@ -40,6 +71,11 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    public void PauseGame(bool pause)
+    {
+        hasPaused = pause;
+    }
+
     private void PressKey(Direction dir)
     {
         if (Input.GetKeyDown(InputManager.Instance.keySetDict[dir]))
@@ -50,12 +86,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     private Notes CheckNote(float size)
     {
-        return Physics2D.OverlapCircle(centerObject.transform.position, size, LayerMask.GetMask("Notes"))?.GetComponent<Notes>();
+        return Physics2D.OverlapCircle(Vector2.zero , size, LayerMask.GetMask("Notes"))?.GetComponent<Notes>();
     }
 
     private IEnumerator Ready()
     {
         correctNotes = 0;
+        hasPaused = false;
         StartCoroutine(UIManager.Instance.ShowToolTips());
         yield return new WaitForSeconds(5);
         StartCoroutine(Play());
@@ -79,5 +116,10 @@ public class GameManager : MonoSingleton<GameManager>
             Notes b = PoolManager.Instance.Pool(originalNote).GetComponent<Notes>();
             NoteController.Bigger(b, 5, 0.5f, Direction.Right);
         }
+    }
+
+    public static void ChangeState(GameState state)
+    {
+        CurrentState = state;
     }
 }

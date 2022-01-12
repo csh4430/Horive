@@ -9,12 +9,19 @@ public class FileManager : MonoSingleton<FileManager>
 {
     [SerializeField] private Setting setting = new Setting();
 
-    private void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+        
+    }
+
+    public override void Initialize()
     {
         setting = LoadJsonFile<Setting>(Application.dataPath + "/Save", "Setting");
-        foreach(KeySetting keySet in setting.keySetting)
+        foreach (KeySetting keySet in setting.keySetting)
         {
-            UIManager.Instance.SetKey(keySet.direction, keySet.keyCode);
+            if (GameManager.CurrentState != GameManager.GameState.Init)
+                UIManager.Instance.SetKey(keySet.direction, keySet.keyCode);
             InputManager.Instance.SetKey(keySet.direction, keySet.keyCode);
         }
     }

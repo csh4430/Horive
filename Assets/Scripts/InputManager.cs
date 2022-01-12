@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoSingleton<InputManager>
 {
-    [SerializeField] private KeyCode settingKey = KeyCode.Escape;
+    private KeyCode settingKey = KeyCode.Escape;
     public Dictionary<Direction, KeyCode> keySetDict = new Dictionary<Direction, KeyCode>();
     public Dictionary<KeyCode, Direction> dirSetDict = new Dictionary<KeyCode, Direction>();
     private bool isHoldingKey = false;
@@ -12,7 +13,12 @@ public class InputManager : MonoSingleton<InputManager>
     private Direction dir = Direction.None;
     private void Update()
     {
-        if (Input.GetKeyDown(settingKey))
+        if (Input.anyKeyDown && GameManager.CurrentState == GameManager.GameState.Init)
+        {
+            SceneManager.LoadScene("Main");
+            GameManager.ChangeState(GameManager.GameState.InGame);
+        }
+        if (Input.GetKeyDown(settingKey) && GameManager.CurrentState != GameManager.GameState.Init)
         {
             UIManager.Instance.SetPanel("Setting");
         }

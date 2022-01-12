@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Mono singleton. From http://wiki.unity3d.com/index.php?title=Singleton#Generic_Based_Singleton_for_MonoBehaviours
@@ -46,6 +47,11 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
             m_Instance = this as T;
             DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            var obj = FindObjectsOfType<T>(); if (obj.Length > 1) {Destroy(gameObject); }
+        }
+        Initialize();
     }
 
     /// <summary>
@@ -55,4 +61,25 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     {
         m_Instance = null;
     }
+
+    public virtual void Initialize()
+    {
+
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode level)
+    {
+        Initialize();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 }

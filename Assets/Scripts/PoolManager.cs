@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoolManager : MonoSingleton<PoolManager>
 {
-    private  List<GameObject> poolList = new List<GameObject>();
+    private List<GameObject> poolList = new List<GameObject>();
 
     public GameObject Pool(GameObject original, Transform parent)
     {
