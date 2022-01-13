@@ -13,14 +13,27 @@ public class InputManager : MonoSingleton<InputManager>
     private Direction dir = Direction.None;
     private void Update()
     {
-        if (Input.anyKeyDown && GameManager.CurrentState == GameManager.GameState.Init)
+        if (Input.GetMouseButtonDown(0) && GameManager.CurrentState == GameManager.GameState.Init)
         {
-            SceneManager.LoadScene("Main");
-            GameManager.ChangeState(GameManager.GameState.InGame);
+            Debug.Log(1);
+            NoteController.Bigger(PoolManager.Instance.Pool(GameManager.Instance.originalNote).GetComponent<Notes>(), 5, 1f, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            UIManager.Instance.Fade(true, () =>
+            {
+                GameManager.ChangeState(GameManager.GameState.Select);
+                SceneManager.LoadScene("Select");
+                UIManager.Instance.Fade(false, null);
+            }); 
         }
         if (Input.GetKeyDown(settingKey) && GameManager.CurrentState != GameManager.GameState.Init)
         {
             UIManager.Instance.SetPanel("Setting");
+        }
+    }
+    public void PressKey(Direction dir)
+    {
+        if (Input.GetKeyDown(keySetDict[dir]))
+        {
+            UIManager.Instance.ShowKeyInput(dir);
         }
     }
 
@@ -28,7 +41,7 @@ public class InputManager : MonoSingleton<InputManager>
     {
         keySetDict[direction] = key;
         dirSetDict[key] = direction;
-        FileManager.Instance.SaveJson(Application.dataPath + "/Save", "Setting", new Setting(keySetDict));
+        FileManager.Instance.SaveJson(Application.dataPath + "/Save", "Setting", new Setting(keySetDict, FileManager.Instance.setting.audioSetting));
     }
 
     public KeyCode GetKey(Direction direction)

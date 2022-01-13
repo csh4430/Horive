@@ -51,7 +51,6 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         {
             var obj = FindObjectsOfType<T>(); if (obj.Length > 1) {Destroy(gameObject); }
         }
-        Initialize();
     }
 
     /// <summary>
@@ -64,7 +63,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 
     public virtual void Initialize()
     {
-
+        Debug.Log(typeof(T).ToString() + " Has Initialized");
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode level)

@@ -75,7 +75,6 @@ public class PoolManager : MonoSingleton<PoolManager>
         return result;
     }
 
-
     public void DeSpawn(GameObject target)
     {
         poolList.Add(target);

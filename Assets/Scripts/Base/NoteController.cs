@@ -31,4 +31,11 @@ public class NoteController
             PoolManager.Instance.DeSpawn(note.gameObject);
         };
     }
+
+    public static void Bigger(Notes note, float size, float duration, Vector2 position)
+    {
+        note.transform.position = position;
+
+        note.transform.DOScale(Vector2.one * size, duration);
+    }
 }

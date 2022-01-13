@@ -26,4 +26,30 @@ public class Setting
             keySetting.Add(new KeySetting(a.Key, a.Value));
         }
     }
+
+    public Setting(AudioSetting audioSetting)
+    {
+        this.audioSetting = audioSetting;
+    }
+
+
+    public Setting(Dictionary<Direction, KeyCode> keySetDict, AudioSetting audioSetting)
+    {
+        keySetting.Clear();
+
+        foreach (var a in keySetDict)
+        {
+            keySetting.Add(new KeySetting(a.Key, a.Value));
+        }
+
+        this.audioSetting = audioSetting;
+
+    }
+
+    public Setting(List<KeySetting> keySetting, AudioSetting audioSetting)
+    {
+        this.keySetting =   keySetting;
+
+        this.audioSetting = audioSetting;
+    }
 }

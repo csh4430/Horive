@@ -13,7 +13,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     #region InGame
-    private GameObject originalNote = null;
+    public GameObject originalNote { get; private set; }
     private float offset = 0.5f;
     private int correctNotes = 0;
     public bool hasPaused { get; private set; }
@@ -31,6 +31,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public override void Initialize()
     {
+        base.Initialize();
         if (CurrentState == GameState.InGame)
         {
             //centerObject = GameObject.Find("Center");
@@ -44,6 +45,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void Start()
     {
+
     }
     void Update()
     {
@@ -51,10 +53,10 @@ public class GameManager : MonoSingleton<GameManager>
         {
             Notes a = CheckNote(offset);
 
-            PressKey(Direction.Left);
-            PressKey(Direction.Right);
-            PressKey(Direction.Up);
-            PressKey(Direction.Down);
+            InputManager.Instance.PressKey(Direction.Left);
+            InputManager.Instance.PressKey(Direction.Right);
+            InputManager.Instance.PressKey(Direction.Up);
+            InputManager.Instance.PressKey(Direction.Down);
             
             if (a != null)
             { 
@@ -74,14 +76,6 @@ public class GameManager : MonoSingleton<GameManager>
     public void PauseGame(bool pause)
     {
         hasPaused = pause;
-    }
-
-    private void PressKey(Direction dir)
-    {
-        if (Input.GetKeyDown(InputManager.Instance.keySetDict[dir]))
-        {
-            UIManager.Instance.ShowKeyInput(dir);
-        }
     }
 
     private Notes CheckNote(float size)
