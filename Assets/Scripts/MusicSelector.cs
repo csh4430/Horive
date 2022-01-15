@@ -17,4 +17,11 @@ public class MusicSelector : MonoBehaviour
         MusicName = transform.GetChild(0).GetComponent<Text>();
         ComposerName = transform.GetChild(1).GetComponent<Text>();
     }
+
+    public void WriteDesc(int tag, string title, string composer)
+    {
+        Tag = tag;
+        MusicName.text = title;
+        ComposerName.text = composer;
+    }
 }

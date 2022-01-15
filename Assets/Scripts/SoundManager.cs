@@ -37,7 +37,7 @@ public class SoundManager : MonoSingleton<SoundManager>
                 break;
         }
         MasterMixer.SetFloat(key, value * (2f / 5f) - 40f);
-        Setting load = FileManager.Instance.LoadJsonFile<Setting>(Application.dataPath + "/Save", "Setting");
+        Setting load = FileManager.Instance.LoadJsonFile<Setting>(Application.streamingAssetsPath + "/Save", "Setting");
         FileManager.Instance.SaveJson(Application.dataPath + "/Save", "Setting", new Setting(load.keySetting, FileManager.Instance.setting.audioSetting));
     }
 }

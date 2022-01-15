@@ -1,0 +1,36 @@
+{
+  "Tag" : 1,
+  "title": "Gymnopedie No.1",
+  "composer": "Erik Satie",
+  "noteCnt": 4,
+  "second": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "size": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "duration": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "direction": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "isLast": [
+    false,
+    false,
+    false,
+    false
+  ]
+}

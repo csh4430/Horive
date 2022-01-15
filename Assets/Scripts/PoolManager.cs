@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PoolManager : MonoSingleton<PoolManager>
 {
-    private List<GameObject> poolList = new List<GameObject>();
-
+    public List<GameObject> poolList = new List<GameObject>();
+    public override void Initialize()
+    {
+        base.Initialize();
+        poolList.Clear();
+    }
     public GameObject Pool(GameObject original, Transform parent)
     {
         GameObject result = null;

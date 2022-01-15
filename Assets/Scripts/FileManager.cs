@@ -8,6 +8,8 @@ using UnityEngine;
 public class FileManager : MonoSingleton<FileManager>
 {
     public Setting setting = new Setting();
+    public Patterns pattern = new Patterns();
+    public List<Patterns> patterns = new List<Patterns>();
 
     protected override void Awake()
     {
@@ -18,7 +20,13 @@ public class FileManager : MonoSingleton<FileManager>
     {
         base.Initialize();
 
-        setting = LoadJsonFile<Setting>(Application.dataPath + "/Save", "Setting");
+        setting = LoadJsonFile<Setting>(Application.streamingAssetsPath + "/Save", "Setting");
+
+        patterns.Clear();
+        for (int i = 0; i < 5; i++)
+        {
+            patterns.Add(LoadJsonFile<Patterns>(Application.streamingAssetsPath + "/Save", "Pattern_" + i.ToString()));
+        }
         foreach (KeySetting keySet in setting.keySetting)
         {
             if (GameManager.CurrentState != GameManager.GameState.Init)
@@ -31,6 +39,10 @@ public class FileManager : MonoSingleton<FileManager>
             UIManager.Instance.SetSlider("Music", setting.audioSetting.music);
             UIManager.Instance.SetSlider("HitSound", setting.audioSetting.music);
             UIManager.Instance.SetSlider("Interaction", setting.audioSetting.music);
+        }
+        if (GameManager.CurrentState == GameManager.GameState.InGame)
+        {
+            pattern = LoadJsonFile<Patterns>(Application.streamingAssetsPath + "/Save", "Pattern_" + GameManager.Instance.Tag.ToString());
         }
     }
 

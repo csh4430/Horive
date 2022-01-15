@@ -1,0 +1,36 @@
+{
+    "Tag": 0,
+    "title": "Tutorial",
+    "composer": "Developer",
+    "noteCnt": 4,
+    "second": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+    ],
+    "size": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+    ],
+    "duration": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+    ],
+    "direction": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "isLast": [
+        false,
+        false,
+        false,
+        false
+    ]
+}

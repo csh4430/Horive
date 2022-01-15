@@ -1,0 +1,26 @@
+{
+    "keySetting": [
+        {
+            "direction": 0,
+            "keyCode": 100
+        },
+        {
+            "direction": 1,
+            "keyCode": 107
+        },
+        {
+            "direction": 2,
+            "keyCode": 102
+        },
+        {
+            "direction": 3,
+            "keyCode": 108
+        }
+    ],
+    "audioSetting": {
+        "master": 50.0,
+        "music": 50.0,
+        "hitSound": 50.0,
+        "interaction": 50.0
+    }
+}
