@@ -30,6 +30,8 @@ public class UIManager : MonoSingleton<UIManager>
     private Button quitBtn = null;
     private Button startBtn = null;
 
+    Sequence sequence;
+
     protected override void Awake()
     {
         base.Awake();
@@ -171,29 +173,37 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowKeyInput(Direction key)
     {
-        GameObject keyObject = PoolManager.Instance.Pool(inputKey);
-        switch (key)
+        sequence = DOTween.Sequence().OnStart(() =>
         {
-            case Direction.Left:
-                keyObject.transform.rotation = Quaternion.Euler(0, 0, 90);
-                break;
-            case Direction.Right:
-                keyObject.transform.rotation = Quaternion.Euler(0, 0, -90);
-                break;
-            case Direction.Up:
-                keyObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-                break;
-            case Direction.Down:
-                keyObject.transform.rotation = Quaternion.Euler(180, 0, 0);
-                break;
-        }
-        keyObject.GetComponent<SpriteRenderer>().DOFade(0, 1f);
-        keyObject.transform.DOScale(Vector2.one * 20, 1f).onComplete += () =>
-        {
-            keyObject.GetComponent<SpriteRenderer>().color = Color.white;
-            keyObject.transform.localScale = Vector3.one;
-            PoolManager.Instance.DeSpawn(keyObject);
-        };
+            GameObject keyObject = PoolManager.Instance.Pool(inputKey);
+            switch (key)
+            {
+                case Direction.Left:
+                    keyObject.transform.rotation = Quaternion.Euler(0, 0, 90);
+                    break;
+                case Direction.Right:
+                    keyObject.transform.rotation = Quaternion.Euler(0, 0, -90);
+                    break;
+                case Direction.Up:
+                    keyObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    break;
+                case Direction.Down:
+                    keyObject.transform.rotation = Quaternion.Euler(180, 0, 0);
+                    break;
+            }
+            keyObject.GetComponent<SpriteRenderer>().DOFade(0, 1f);
+            keyObject.transform.DOScale(Vector2.one * 20, 1f).onComplete += () =>
+            {
+                keyObject.GetComponent<SpriteRenderer>().color = Color.white;
+                keyObject.transform.localScale = Vector3.one;
+                PoolManager.Instance.DeSpawn(keyObject);
+            };
+        });
+    }
+
+    public void StopTween()
+    {
+        sequence.Kill();
     }
 
     public void SetPanel(string panel)
@@ -254,12 +264,13 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowResult(string result)
     {
-        
         resultTxt.text = result;
         resultTxt.DOFade(1, 1f);
+        StopTween();
         Fade(true, () =>
         {
             NoteController.Stop();
+            SoundManager.Instance.StopMusic();
             GameManager.ChangeState(GameManager.GameState.Select);
             SceneManager.LoadScene("Select");
             Fade(false, null);

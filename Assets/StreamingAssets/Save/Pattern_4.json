@@ -1,36 +1,61 @@
 {
-    "Tag": 0,
-    "title": "Tutorial",
-    "composer": "Developer",
-    "noteCnt": 4,
-    "second": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-    ],
-    "size": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-    ],
-    "duration": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-    ],
-    "direction": [
-        0,
-        0,
-        0,
-        0
-    ],
-    "isLast": [
-        false,
-        false,
-        false,
-        false
-    ]
+  "Tag": 4,
+  "title": "Fur Elise",
+  "composer": "Ludwig van Beethoven",
+  "noteCnt": 9,
+  "second": [
+    0.375,
+    0.1875,
+    0.1875,
+    0.1875,
+    0.1875,
+    0.1875,
+    0.1875,
+    0.1875,
+    0.1875
+  ],
+  "size": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "duration": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "direction": [
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0
+  ],
+  "isLast": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ]
 }

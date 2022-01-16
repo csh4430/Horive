@@ -79,6 +79,20 @@ public class PoolManager : MonoSingleton<PoolManager>
         return result;
     }
 
+    public List<GameObject> Find(string name)
+    {
+        List<GameObject> result = new List<GameObject>();
+        foreach(var pool in poolList)
+        {
+            if(pool.name == name)
+            {
+                result.Add(pool);
+            }
+        }
+
+        return result;
+    }
+
     public void DeSpawn(GameObject target)
     {
         poolList.Add(target);

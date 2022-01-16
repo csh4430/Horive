@@ -15,8 +15,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region InGame
     public GameObject originalNote { get; private set; }
-    private float offset = 0.5f;
-    private int correctNotes = 0;
+    private float offset = 0.4f;
     public int Life { get; private set; }
     public bool hasPaused { get; private set; }
     public int Tag { get; set; }
@@ -29,7 +28,6 @@ public class GameManager : MonoSingleton<GameManager>
         base.Awake();
 
         CurrentState = GameState.Init;
-        Application.targetFrameRate = 300;
     }
 
     public override void Initialize()
@@ -59,32 +57,51 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (Input.anyKeyDown && !hasPaused && CurrentState == GameState.InGame)
         {
-            List<Notes> correct = CheckNotes(offset);
-            List<Notes> early = CheckNotes(offset + 0.1f);
-            List<Notes> late = CheckNotes(offset - 0.1f);
+            List<Notes> correct = CheckNotes(offset + 0.15f);
+            List<Notes> early = CheckNotes(offset + 0.25f);
 
             InputManager.Instance.PressKey(Direction.Left);
             InputManager.Instance.PressKey(Direction.Right);
             InputManager.Instance.PressKey(Direction.Up);
             InputManager.Instance.PressKey(Direction.Down);
-            
-            if (correct.Count > 0)
-            { 
-                for(int i = 0; i < correct.Count; i++)
+
+            if(early.Count > 0)
+            {
+                if (correct.Count > 0)
                 {
-                    if (Input.GetKeyDown(InputManager.Instance.GetKey(correct[i].direction)))
+                    for (int i = 0; i < correct.Count; i++)
                     {
-                        float noteSpeed = correct[i].size / 2 / correct[i].duration;
-                        float pitch = (correct[i].size / 2 - offset) / noteSpeed;
-                        Debug.Log(string.Format("{0}, {1}, {2}", pitch, Time.time, correct[i].summonedTime));
-                        Debug.Log(pitch - (Time.time - correct[i].summonedTime));
-                        DOTween.Kill(correct[i].transform);
-                        if (correct[i].GetComponent<Notes>().isLast)
+                        if (Input.GetKeyDown(InputManager.Instance.GetKey(correct[i].direction)))
                         {
-                            UIManager.Instance.ShowResult("Success");
+                            float noteSpeed = correct[i].size / 2 / correct[i].duration;
+                            float pitch = (correct[i].size / 2 - offset) / noteSpeed;
+                            Debug.Log(string.Format("{0}, {1}, {2}", pitch, Time.time, correct[i].summonedTime));
+                            Debug.Log(pitch - (Time.time - correct[i].summonedTime));
+                            DOTween.Kill(correct[i].transform);
+                            if (correct[i].GetComponent<Notes>().isLast)
+                            {
+                                UIManager.Instance.ShowResult("Success");
+                            }
+                            PoolManager.Instance.DeSpawn(correct[i].gameObject);
                         }
-                        PoolManager.Instance.DeSpawn(correct[i].gameObject);
                     }
+                }
+                else
+                {
+                    for (int i = 0; i < early.Count; i++)
+                    {
+                        if (Input.GetKeyDown(InputManager.Instance.GetKey(early[i].direction)))
+                        {
+                            Fail();
+                            DOTween.Kill(early[i].transform);
+                            if (early[i].GetComponent<Notes>().isLast)
+                            {
+                                UIManager.Instance.ShowResult("Success");
+                            }
+                            PoolManager.Instance.DeSpawn(early[i].gameObject);
+                        }
+                    }
+
                 }
             }
         }
@@ -122,11 +139,14 @@ public class GameManager : MonoSingleton<GameManager>
 
     private IEnumerator Ready()
     {
-        correctNotes = 0;
         hasPaused = false;
         StartCoroutine(UIManager.Instance.ShowToolTips());
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(5); 
         StartCoroutine(Play(FileManager.Instance.pattern));
+        yield return new WaitForSeconds(offset);
+        SoundManager.Instance.PlayMusic(FileManager.Instance.pattern.title);
+        yield break;
+
     }
 
 
@@ -135,10 +155,13 @@ public class GameManager : MonoSingleton<GameManager>
         for(int i =  0; i < patterns.noteCnt; i++)
         {
             if (hasPaused) yield break;
+
+            yield return new WaitForSeconds(patterns.second[i]);
+
             Notes note = PoolManager.Instance.Pool(originalNote).GetComponent<Notes>();
             NoteController.Bigger(note, patterns.size[i], patterns.duration[i], patterns.direction[i], patterns.isLast[i]);
-            yield return new WaitForSeconds(patterns.second[i]);
         }
+        yield break;
     }
 
     public static void ChangeState(GameState state)

@@ -14,13 +14,13 @@
         },
         {
             "direction": 3,
-            "keyCode": 108
+            "keyCode": 106
         }
     ],
     "audioSetting": {
-        "master": 50.0,
-        "music": 50.0,
-        "hitSound": 50.0,
-        "interaction": 50.0
+        "master": 100.0,
+        "music": 100.0,
+        "hitSound": 100.0,
+        "interaction": 100.0
     }
 }

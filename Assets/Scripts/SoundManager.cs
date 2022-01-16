@@ -6,10 +6,13 @@ using UnityEngine.Audio;
 public class SoundManager : MonoSingleton<SoundManager>
 {
     public AudioMixer MasterMixer { get; private set; }
+    public AudioSource MusicSource { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
+        MusicSource = GameObject.Find("Music Source").GetComponent<AudioSource>();
+        DontDestroyOnLoad(MusicSource.transform.parent.gameObject);
     }
 
     public override void Initialize()
@@ -38,6 +41,18 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         MasterMixer.SetFloat(key, value * (2f / 5f) - 40f);
         Setting load = FileManager.Instance.LoadJsonFile<Setting>(Application.streamingAssetsPath + "/Save", "Setting");
-        FileManager.Instance.SaveJson(Application.dataPath + "/Save", "Setting", new Setting(load.keySetting, FileManager.Instance.setting.audioSetting));
+        FileManager.Instance.SaveJson(Application.streamingAssetsPath + "/Save", "Setting", new Setting(load.keySetting, FileManager.Instance.setting.audioSetting));
+    }
+
+    public void PlayMusic(string name)
+    {
+        MusicSource.clip = (AudioClip)Resources.Load("Music/" + name);
+        MusicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        MusicSource.clip = null;
+        MusicSource.Stop();
     }
 }
