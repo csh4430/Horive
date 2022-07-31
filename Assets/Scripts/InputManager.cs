@@ -13,9 +13,16 @@ public class InputManager : MonoSingleton<InputManager>
     private Direction dir = Direction.None;
     private void Update()
     {
-        if (Input.GetKeyDown(settingKey) && GameManager.CurrentState != GameManager.GameState.Init)
+        if (Input.GetKeyDown(settingKey))
         {
-            UIManager.Instance.SetPanel("Setting");
+            switch (GameManager.CurrentState) {
+                case GameManager.GameState.InGame:
+                    UIManager.Instance.SetPanel("Pause");
+                    break;
+                case GameManager.GameState.Select:
+                    UIManager.Instance.SetPanel("Setting");
+                    break;
+            }
         }
     }
     public void PressKey(Direction dir)
@@ -30,7 +37,7 @@ public class InputManager : MonoSingleton<InputManager>
     {
         keySetDict[direction] = key;
         dirSetDict[key] = direction;
-        FileManager.Instance.SaveJson(Application.streamingAssetsPath + "/Save", "Setting", new Setting(keySetDict, FileManager.Instance.setting.audioSetting));
+        FileManager.Instance.SaveJson(Application.streamingAssetsPath + "/Save", "Setting", new Setting(keySetDict, FileManager.Instance.setting.offset, FileManager.Instance.setting.audioSetting));
     }
 
     public KeyCode GetKey(Direction direction)

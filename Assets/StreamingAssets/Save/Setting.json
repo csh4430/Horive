@@ -17,10 +17,10 @@
             "keyCode": 106
         }
     ],
+    "offset": 0.0,
     "audioSetting": {
-        "master": 100.0,
-        "music": 100.0,
-        "hitSound": 100.0,
-        "interaction": 100.0
+        "master": 80.0,
+        "music": 80.0,
+        "interaction": 80.0
     }
 }

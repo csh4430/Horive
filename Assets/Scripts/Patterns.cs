@@ -2,6 +2,7 @@
 public class Patterns
 {
     public int Tag;
+    public bool HasCleared;
     public string title;
     public string composer;
     public int noteCnt;
@@ -14,6 +15,7 @@ public class Patterns
     public Patterns()
     {
         Tag = 0;
+        HasCleared = false;
         title = "Tutorial";
         composer = "Developer";
         noteCnt = 4;

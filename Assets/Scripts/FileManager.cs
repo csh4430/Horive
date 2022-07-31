@@ -14,6 +14,7 @@ public class FileManager : MonoSingleton<FileManager>
     protected override void Awake()
     {
         base.Awake();
+        
     }
 
     public override void Initialize()
@@ -23,9 +24,15 @@ public class FileManager : MonoSingleton<FileManager>
         setting = LoadJsonFile<Setting>(Application.streamingAssetsPath + "/Save", "Setting");
 
         patterns.Clear();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
             patterns.Add(LoadJsonFile<Patterns>(Application.streamingAssetsPath + "/Save", "Pattern_" + i.ToString()));
+        }
+        SoundManager.Instance.audioClips.Clear();
+        foreach (var a in patterns)
+        {
+            if (a.title != "Tutorial")
+            SoundManager.Instance.audioClips.Add(a.title, (AudioClip)Resources.Load("Music/" + a.title));
         }
         foreach (KeySetting keySet in setting.keySetting)
         {
@@ -35,10 +42,10 @@ public class FileManager : MonoSingleton<FileManager>
         }
         if (GameManager.CurrentState != GameManager.GameState.Init)
         {
+            UIManager.Instance.SetOffsetUI(setting.offset);
             UIManager.Instance.SetSlider("Master", setting.audioSetting.master);
             UIManager.Instance.SetSlider("Music", setting.audioSetting.music);
-            UIManager.Instance.SetSlider("HitSound", setting.audioSetting.music);
-            UIManager.Instance.SetSlider("Interaction", setting.audioSetting.music);
+            UIManager.Instance.SetSlider("Interaction", setting.audioSetting.interaction);
         }
         if (GameManager.CurrentState == GameManager.GameState.InGame)
         {
@@ -50,7 +57,6 @@ public class FileManager : MonoSingleton<FileManager>
     {
         SoundManager.Instance.AudioControl("Master", setting.audioSetting.master);
         SoundManager.Instance.AudioControl("Music", setting.audioSetting.music);
-        SoundManager.Instance.AudioControl("HitSound", setting.audioSetting.hitSound);
         SoundManager.Instance.AudioControl("Interaction", setting.audioSetting.interaction);
         
     }

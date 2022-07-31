@@ -24,4 +24,12 @@ public class ToolTip : MonoBehaviour
         image?.DOFade(1, 1f).OnComplete(() => { image?.DOFade(0, 2f).SetDelay(2); });
         text?.DOFade(1, 1f).OnComplete(() => { text?.DOFade(0, 2f).SetDelay(2); });
     }
+
+    public void StopTween()
+    {
+        if (image != null)
+            DOTween.Kill(image);
+        if(text != null)
+            DOTween.Kill(text);
+    }
 }

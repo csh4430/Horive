@@ -5,7 +5,9 @@ using UnityEngine;
 public class Setting
 {
     public List<KeySetting> keySetting = new List<KeySetting>();
+    public float offset;
     public AudioSetting audioSetting;
+
 
     public Setting()
     {
@@ -14,6 +16,7 @@ public class Setting
         keySetting.Add(new KeySetting(Direction.Right));
         keySetting.Add(new KeySetting(Direction.Up));
         keySetting.Add(new KeySetting(Direction.Down));
+        offset = 0f;
         audioSetting = new AudioSetting();
     }
 
@@ -33,7 +36,7 @@ public class Setting
     }
 
 
-    public Setting(Dictionary<Direction, KeyCode> keySetDict, AudioSetting audioSetting)
+    public Setting(Dictionary<Direction, KeyCode> keySetDict, float offset, AudioSetting audioSetting)
     {
         keySetting.Clear();
 
@@ -41,15 +44,15 @@ public class Setting
         {
             keySetting.Add(new KeySetting(a.Key, a.Value));
         }
-
+        this.offset = offset;
         this.audioSetting = audioSetting;
 
     }
 
-    public Setting(List<KeySetting> keySetting, AudioSetting audioSetting)
+    public Setting(List<KeySetting> keySetting, float offset, AudioSetting audioSetting)
     {
         this.keySetting =   keySetting;
-
+        this.offset = offset;
         this.audioSetting = audioSetting;
     }
 }
